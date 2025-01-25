@@ -1,5 +1,7 @@
 class_name InputManager extends Node2D
 
+signal new_device_connected(inputDevice : InputDevice)
+
 var deviceList : Array[InputDevice]
 
 func _ready() -> void:
@@ -42,6 +44,7 @@ func _on_joy_connection_changed(device : int, connected : bool):
 		# Allocate space for the new device if necessary
 		if device >= deviceList.size():
 			deviceList.resize(device + 1)
+			new_device_connected.emit(deviceList[device])
 		
 		# Add the new device to the list
 		deviceList[device] = InputDevice.new()
@@ -55,6 +58,34 @@ func _on_joy_connection_changed(device : int, connected : bool):
 func handle_device_input(deviceID : int, moveDir : Vector2, aimDir : Vector2) -> void:
 	
 	# Set the movement and aiming inputs on the relevant device
-	deviceList[deviceID].set_move_input(moveDir)
-	deviceList[deviceID].set_aim_input(aimDir)
+	deviceList[deviceID].moveInput = moveDir
+	deviceList[deviceID].aimInput = aimDir
+
+func get_connected_device_IDs() -> Array[int]:
 	
+	var connectedDeviceIDs : Array[int]
+	
+	# Iterate over devices in our device list
+	for i in range(deviceList.size()):
+		
+		# If the device exists, add its ID as a connected device ID
+		if deviceList[i] != null:
+			connectedDeviceIDs.append(i)
+
+	return connectedDeviceIDs
+
+func get_device_move_input(deviceID : int) -> Vector2:
+	
+	if deviceList[deviceID] != null:
+		return deviceList[deviceID].moveInput
+		
+	else:
+		return Vector2.ZERO
+		
+func get_device_aim_input(deviceID : int) -> Vector2:
+	
+	if deviceList[deviceID] != null:
+		return deviceList[deviceID].aimInput
+		
+	else:
+		return Vector2.ZERO

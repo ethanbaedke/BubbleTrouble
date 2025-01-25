@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqwb7uxqn15jv"]
+
+[ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_2g8ag"]
+[ext_resource type="PackedScene" uid="uid://dlpibt03w2ors" path="res://scenes/InputManager.tscn" id="2_qf5l2"]
+
+[node name="GameManager" type="Node2D"]
+script = ExtResource("1_2g8ag")
+
+[node name="InputManager" parent="." instance=ExtResource("2_qf5l2")]
+
+[connection signal="new_device_connected" from="InputManager" to="." method="_on_input_manager_new_device_connected"]
