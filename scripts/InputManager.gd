@@ -1,4 +1,4 @@
-class_name InputManager extends Node2D
+class_name InputManager extends Node
 
 signal new_device_connected(inputDevice : InputDevice)
 
